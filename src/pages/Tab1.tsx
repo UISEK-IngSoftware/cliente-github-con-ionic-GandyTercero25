@@ -1,9 +1,23 @@
-import { IonContent, IonHeader, IonList, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonContent, IonHeader, IonList, IonPage, IonTitle, IonToolbar, useIonViewDidEnter } from '@ionic/react';
 
 import './Tab1.css';
 import RepoItem from '../components/RepoItem';
+import { fecthRepositories } from '../services/GithubService';
+import { RepositoryItem } from '../interfaces/RepositoryItem';
+import { useState } from 'react';
 
 const Tab1: React.FC = () => {
+  const [repos, setRepos] = useState<RepositoryItem[]>([]);
+
+  const loadRepos = async () => {
+    const reposData = await fecthRepositories();
+    setRepos(reposData);
+  };
+
+  useIonViewDidEnter(() => {
+    loadRepos();
+  });
+
   return (
     <IonPage>
       <IonHeader>
@@ -18,21 +32,13 @@ const Tab1: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <IonList>
-          <RepoItem 
-            name="android-project"
-            imageurl="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Android_robot.svg/1022px-Android_robot.svg.png" 
-            /> 
-            
-          <RepoItem 
-            name="iOS-project"
-            imageurl="https://e7.pngegg.com/pngimages/980/413/png-clipart-apple-logo-business-iphone-apple-heart-computer.png" 
-            /> 
-            
-          <RepoItem 
-            name="Ionic-project"
-            imageurl="https://e7.pngegg.com/pngimages/426/603/png-clipart-ionic-new-logo-tech-companies.png" 
+          {repos.map((repo, index) => (
+            <RepoItem 
+              key={index}
+              name={repo.name}
+              imageurl={repo.imageUrl || 'https://via.placeholder.com/150'} 
             />
-
+          ))}
 
 
 
