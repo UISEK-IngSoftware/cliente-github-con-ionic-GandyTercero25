@@ -3,9 +3,9 @@
 
 ## Información del Estudiante
 
-- **Nombre:** [Tu nombre completo aquí]
-- **Carrera:** [Tu carrera]
-- **Fecha de inicio:** [Fecha]
+- **Nombre:** Gandy Napoleon Tercero Tercero
+- **Carrera:** Ingenieria Informatica
+- **Fecha de inicio:** 12/03/2025
 
 ---
 
