@@ -16,19 +16,18 @@ const Tab3: React.FC = () => {
           <IonToolbar>
             <IonTitle size="large">Perfil de Usuario</IonTitle>
           </IonToolbar>
-          </IonHeader>
-          <IonCard>
-            <img alt="Silhouette of mountains" src="https://pics.filmaffinity.com/077111620186735-nm_200.jpg" />
-            <IonCardHeader>
-              <IonCardTitle>José Escobar</IonCardTitle>
-              <IonCardSubtitle>josescobar</IonCardSubtitle>
-            </IonCardHeader>
-
-            <IonCardContent>Breve Descripción.</IonCardContent>
-          </IonCard>
-          </IonContent>
-        </IonPage>
-        );
+        </IonHeader>
+        <IonCard>
+          <img alt="Foto de perfil" src="https://i.pravatar.cc/300?img=12" />
+          <IonCardHeader>
+            <IonCardTitle>Gandy Tercero</IonCardTitle>
+            <IonCardSubtitle>gandytercero</IonCardSubtitle>
+          </IonCardHeader>
+          <IonCardContent>Estudiante de Ingenieria Informatica</IonCardContent>
+        </IonCard>
+      </IonContent>
+    </IonPage>
+  );
 };
 
-        export default Tab3;
+export default Tab3;
