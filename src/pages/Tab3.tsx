@@ -1,9 +1,23 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
-
 import './Tab3.css';
+import { UserInfo } from '../interfaces/UserInfo';
+import { getUserInfo } from '../services/GithubService';
+import { useState } from 'react';
 
 const Tab3: React.FC = () => {
+  const[userInfo, setUserInfo] = useState<UserInfo | null>(null);
+
+  const loadUserInfo = async () => {
+    const info = await getUserInfo();
+    setUserInfo(info);
+  };
+
+  useIonViewDidEnter(() => {
+    loadUserInfo();
+  });
+
+
   return (
     <IonPage>
       <IonHeader>

@@ -1,8 +1,7 @@
 import { IonContent, IonHeader, IonList, IonPage, IonTitle, IonToolbar, useIonViewDidEnter } from '@ionic/react';
-
 import './Tab1.css';
 import RepoItem from '../components/RepoItem';
-import { fecthRepositories } from '../services/GithubService';
+import { fetchRepositories } from '../services/GithubService';
 import { RepositoryItem } from '../interfaces/RepositoryItem';
 import { useState } from 'react';
 
@@ -10,7 +9,7 @@ const Tab1: React.FC = () => {
   const [repos, setRepos] = useState<RepositoryItem[]>([]);
 
   const loadRepos = async () => {
-    const reposData = await fecthRepositories();
+    const reposData = await fetchRepositories();
     setRepos(reposData);
   };
 
@@ -36,15 +35,10 @@ const Tab1: React.FC = () => {
             <RepoItem 
               key={index}
               name={repo.name}
-              imageurl={repo.imageUrl || 'https://via.placeholder.com/150'} 
+              imageUrl={repo.imageUrl || 'https://via.placeholder.com/150'} 
             />
           ))}
-
-
-
         </IonList>
-
-
       </IonContent>
     </IonPage>
   );
