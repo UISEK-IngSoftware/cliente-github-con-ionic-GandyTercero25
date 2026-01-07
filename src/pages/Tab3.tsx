@@ -1,12 +1,13 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
-import './Tab3.css';
-import { UserInfo } from '../interfaces/UserInfo';
+import React, { useState } from 'react';
+import { 
+  IonContent, IonHeader, IonPage, IonTitle, IonToolbar, 
+  IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent,
+  useIonViewDidEnter } from '@ionic/react';
 import { getUserInfo } from '../services/GithubService';
-import { useState } from 'react';
+import { UserInfo } from '../interfaces/UserInfo';
 
 const Tab3: React.FC = () => {
-  const[userInfo, setUserInfo] = useState<UserInfo | null>(null);
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
 
   const loadUserInfo = async () => {
     const info = await getUserInfo();
@@ -17,7 +18,6 @@ const Tab3: React.FC = () => {
     loadUserInfo();
   });
 
-
   return (
     <IonPage>
       <IonHeader>
@@ -26,19 +26,20 @@ const Tab3: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Perfil de Usuario</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-        <IonCard>
-          <img alt="Foto de perfil" src="https://i.pravatar.cc/300?img=12" />
-          <IonCardHeader>
-            <IonCardTitle>Gandy Tercero</IonCardTitle>
-            <IonCardSubtitle>gandytercero</IonCardSubtitle>
-          </IonCardHeader>
-          <IonCardContent>Estudiante de Ingenieria Informatica</IonCardContent>
-        </IonCard>
+        {userInfo && (
+          <IonCard>
+            <img alt="Foto de perfil" src={userInfo.avatar_url} />
+            <IonCardHeader>
+              <IonCardTitle>{userInfo.name}</IonCardTitle>
+              <IonCardSubtitle>{userInfo.login}</IonCardSubtitle>
+            </IonCardHeader>
+            <IonCardContent>
+              {userInfo.bio}
+            </IonCardContent>
+          </IonCard>
+        )}
+        
+        {!userInfo && <p className="ion-padding">Cargando perfil...</p>}
       </IonContent>
     </IonPage>
   );
