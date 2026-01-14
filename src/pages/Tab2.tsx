@@ -11,7 +11,7 @@ const Tab2: React.FC = () => {
   const [repoFormData, setRepoFormData] = useState<RepositoryItem>({
     name: '',
     description: '',
-    imageUrl: null,
+    imageurl: null,
     owner: null,
     language: null,
   });

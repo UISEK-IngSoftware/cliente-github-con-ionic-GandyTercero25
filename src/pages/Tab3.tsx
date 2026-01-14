@@ -1,45 +1,54 @@
-import React, { useState } from 'react';
-import { 
-  IonContent, IonHeader, IonPage, IonTitle, IonToolbar, 
-  IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent,
-  useIonViewDidEnter } from '@ionic/react';
+import React, { useEffect, useState } from 'react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
 import { getUserInfo } from '../services/GithubService';
+
+import './Tab3.css';
 import { UserInfo } from '../interfaces/UserInfo';
+
 
 const Tab3: React.FC = () => {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
 
   const loadUserInfo = async () => {
-    const info = await getUserInfo();
-    setUserInfo(info);
+    try {
+      const info = await getUserInfo();
+      setUserInfo(info);
+    } catch (err) {
+      console.error('Error cargando información de usuario', err);
+    }
   };
 
-  useIonViewDidEnter(() => {
+  useEffect(() => {
     loadUserInfo();
-  });
+  }, []);
 
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Perfil de Usuario</IonTitle>
+          <IonTitle>Perfil de usuario</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        {userInfo && (
-          <IonCard>
-            <img alt="Foto de perfil" src={userInfo.avatar_url} />
-            <IonCardHeader>
-              <IonCardTitle>{userInfo.name}</IonCardTitle>
-              <IonCardSubtitle>{userInfo.login}</IonCardSubtitle>
-            </IonCardHeader>
-            <IonCardContent>
-              {userInfo.bio}
-            </IonCardContent>
-          </IonCard>
-        )}
-        
-        {!userInfo && <p className="ion-padding">Cargando perfil...</p>}
+        <IonHeader collapse="condense">
+          <IonToolbar>
+            <IonTitle size="large">Tab 3</IonTitle>
+          </IonToolbar>
+        </IonHeader>
+        <IonCard>
+          <img
+            alt={userInfo?.login ?? 'avatar'}
+            src={userInfo?.avatar_url ?? 'https://via.placeholder.com/150'}
+            style={{ width: 120, height: 120, borderRadius: 8, display: 'block', margin: '16px auto' }}
+          />
+          <IonCardHeader>
+            <IonCardTitle>{userInfo?.name ?? userInfo?.login ?? 'Usuario'}</IonCardTitle>
+            <IonCardSubtitle>{userInfo?.login ?? '—'}</IonCardSubtitle>
+          </IonCardHeader>
+
+          <IonCardContent>{userInfo?.bio ?? 'Sin biografía'}</IonCardContent>
+        </IonCard>
+
       </IonContent>
     </IonPage>
   );

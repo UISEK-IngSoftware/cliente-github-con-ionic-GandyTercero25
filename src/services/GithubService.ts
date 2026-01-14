@@ -1,18 +1,19 @@
-import axios from 'axios';
-import AuthService from './AuthService';
-import { RepositoryItem } from '../interfaces/RepositoryItem';
+import axios from "axios";
+import { RepositoryItem } from "../interfaces/RepositoryItem";
 import { UserInfo } from '../interfaces/UserInfo';
 
+import AuthService from "./AuthService";
 
-const GITHUB_API_URL = import.meta.env.VITE_API_URL; 
+const GITHUB_API_URL = import.meta.env.VITE_API_URL;
+
 const githubApi = axios.create({
     baseURL: GITHUB_API_URL,
 });
 
 githubApi.interceptors.request.use((config) => {
-    const authHeader = AuthService.getAuthHeader();
-    if (authHeader) {
-        config.headers.Authorization = authHeader;
+    const AuthHeader = AuthService.getAuthHeader();
+    if (AuthHeader) {
+        config.headers.Authorization = AuthHeader;
     }
     return config;
 }, (error) => {
@@ -21,57 +22,53 @@ githubApi.interceptors.request.use((config) => {
 
 export const fetchRepositories = async (): Promise<RepositoryItem[]> => {
     try {
-        const response = await githubApi.get(`/user/repos`, {
-            params: { per_page: 100, sort: 'created', direction: 'desc', affiliation: 'owner' },
+        const response = await githubApi.get(`/user/repos` , {
+            params: {
+                per_page: 100,
+                sort: "created",
+                direction: "desc",
+                affiliation: "owner",
+            }
         });
 
-        if (!Array.isArray(response.data)) {
-            console.error('GitHub no devolvió un array. Respuesta:', response.data);
-            return [];
-        }
-
-        return response.data.map((repo: any) => ({
+        const repositories: RepositoryItem[] = response.data.map((repo: any) => ({
             name: repo.name,
-            description: repo.description,
-            imageUrl: repo.owner?.avatar_url || 'https://via.placeholder.com/150',
-            owner: repo.owner?.login || '',
-            language: repo.language || '',
+            description: repo.description ? repo.description : null,
+            imageurl: repo.owner ? repo.owner.avatar_url : null,
+            owner: repo.owner ? repo.owner.login : null,
+            language: repo.language ? repo.language : null,
         }));
-    } catch (error) {
-        console.error('Error en la petición:', error);
+
+        return repositories;
+
+    } catch (error: any) {
+        console.error("Ocurrió un error al obtener repositorios:", error.response?.status, error.message);
         return [];
     }
-};
+}
 
 export const createRepository = async (repo: RepositoryItem): Promise<void> => {
     try {
-        const response = await githubApi.post(`/user/repos`, {
-            name: repo.name,
-            description: repo.description,
-            private: false 
-        }, {
-
-        });
-        console.log('Repositorio creado con éxito', response.data);
+        const response = await githubApi.post(`/user/repos`, repo)
+        console.log("Repositorio creado", response.data);
+        
     } catch (error) {
-        console.error('Hubo un error al crear el repositorio', error);
+        console.error("Ocurrió un error al crear el repositorio:", error);
     }
 };
 
 export const getUserInfo = async (): Promise<UserInfo> => {
     try {
-        const response = await githubApi.get(`/user`, {
-
-        });
+        const response = await githubApi.get(`/user`);
         return response.data as UserInfo;
     } catch (error) {
-        console.error('Hubo un error al obtener la información del usuario', error);
-        const userNotFound: UserInfo = {
-            login: 'undefined',
-            name: 'Usuario no encontrado',
-            bio: 'No se pudo obtener la información del usuario.',
-            avatar_url: 'https://cdn-icons-png.flaticon.com/512/6858/6858504.png'
-        };
+        console.error("Ocurrió un error al obtener la información del usuario:", error);
+        const userNotFound : UserInfo = {
+            login: "undefined",
+            name: "Usuario no encontrado",
+            bio: "No se pudo obtener la información del usuario.",
+            avatar_url: "https://img.icons8.com/ios_filled/1200/unfriend-male.jpg",
+        }
         return userNotFound;
     }
 };

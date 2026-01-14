@@ -1,22 +1,20 @@
 import { IonContent, IonHeader, IonList, IonPage, IonTitle, IonToolbar, useIonViewDidEnter } from '@ionic/react';
+import React from 'react';
+import { useState } from 'react';
 import './Tab1.css';
 import RepoItem from '../components/RepoItem';
-import { fetchRepositories } from '../services/GithubService';
 import { RepositoryItem } from '../interfaces/RepositoryItem';
-import { useState } from 'react';
-
+import { fetchRepositories } from '../services/GithubService';
 const Tab1: React.FC = () => {
-  const [repos, setRepos] = useState<RepositoryItem[]>([]);
-
-  const loadRepos = async () => {
-    const reposData = await fetchRepositories();
-    setRepos(reposData);
+  const[repos,SetRepos]=React.useState<RepositoryItem[]>([]);
+  const loadRepos= async()=>{
+    const reposData= await fetchRepositories();
+    SetRepos(reposData);
   };
-
-  useIonViewDidEnter(() => {
+  useIonViewDidEnter(()=>{
+    console.log("IownViewDidEnter - Cargando Repositorios")
     loadRepos();
   });
-
   return (
     <IonPage>
       <IonHeader>
@@ -31,14 +29,15 @@ const Tab1: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <IonList>
-          {repos.map((repo, index) => (
-            <RepoItem 
-              key={index}
-              name={repo.name}
-              imageUrl={repo.imageUrl || 'https://via.placeholder.com/150'} 
-            />
-          ))}
+        {repos.map((repos, index)=>
+          <RepoItem 
+          key={index}
+          repo={repos}
+          />)}
+
         </IonList>
+
+
       </IonContent>
     </IonPage>
   );

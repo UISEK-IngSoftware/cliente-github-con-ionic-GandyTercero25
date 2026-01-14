@@ -7,7 +7,7 @@ const RepoItem: React.FC<{repo:RepositoryItem}> = ({ repo }) => {
   return ( 
     <IonItem>
         <IonThumbnail slot="start"> 
-            <img src={repo.imageUrl|| "https://www.reddit.com/r/Ben10/comments/1eavpip/which_omnitrix_logo_styleplacement_was_your/?tl=es-419"} alt={repo.name}/>
+            <img src={repo.imageurl|| "https://i.pinimg.com/736x/06/44/69/0644695c31b934311a6a80e1064485bf.jpg"} alt={repo.name}/>
         </IonThumbnail>
         <IonLabel>
            <h2>{repo.name}</h2>
@@ -20,4 +20,4 @@ const RepoItem: React.FC<{repo:RepositoryItem}> = ({ repo }) => {
   );
 };
 
-export default RepoItem;
+export default RepoItem;
