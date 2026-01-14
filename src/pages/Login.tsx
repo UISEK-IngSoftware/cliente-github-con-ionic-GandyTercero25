@@ -1,21 +1,22 @@
-import React, { useState } from 'react';
-import { 
-  IonHeader, 
-  IonPage, 
-  IonToolbar, 
-  IonTitle, 
-  IonContent, 
-  IonButton, 
-  IonIcon, 
+import {
+  IonButton,
+  IonContent,
+  IonHeader,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+  IonIcon,
   IonInput,
   IonText
 } from "@ionic/react";
+import { useHistory } from 'react-router-dom';
 import { logoGithub } from 'ionicons/icons';
 import './Login.css'
 import AuthService from '../services/AuthService';
 
 
 const Login: React.FC = () => {
+    const history = useHistory();
 
     const [username, setUsername] = useState('');
     const [token, setToken] = useState('');
@@ -23,18 +24,18 @@ const Login: React.FC = () => {
 
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
-        setError('');
-        if (!username || !token) {
-            setError('Por favor, ingresa tu usuario y token de GitHub.');
+        if(!username || !token){
+            setError('Todos los campos son requeridos');
             return;
         }
     const success = AuthService.login(username, token);
     if(success){
-        window.location.href = '/tab1';
+        history.push('/tab1');
     } else {
         setError('Error de autenticación. Verifica tus credenciales.');
     }
-    };
+  }
+
 
     return (
         <IonPage>
@@ -43,19 +44,19 @@ const Login: React.FC = () => {
                     <IonTitle>Login</IonTitle>
                 </IonToolbar>
             </IonHeader>
-            <IonContent fullscreen className = "ion-padding"/>
+            <IonContent fullscreen className="ion-padding">
                 <div className="login-container">
                     <IonIcon icon={logoGithub} className="login-logo"/>
                     <h1> Inicio de sesion GitHub</h1>
-                    <form className="login-form" onSubmit={handleLogin}>
-                        <IonInput 
-                            className="Login field"
-                            label="Usuario de github"
+                    <form onSubmit={handleLogin}>
+                        <IonInput
+                            className="Login-field"
+                            label="Usuario de Github"
                             labelPlacement="floating"
                             fill="outline"
                             type="text"
                             value= {username}
-                            onIonInput={e => setUsername(e.detail.value!)}
+                            onIonInput={e => setUsername(e.detail.value ?? '')}
                             required   
                         />
                         <IonInput
@@ -65,24 +66,25 @@ const Login: React.FC = () => {
                             fill="outline"
                             type="password"
                             value={token}
-                            onIonInput={e => setToken(e.detail.value!)}
+                            onIonInput={e => setToken(e.detail.value ?? '')}
                             required
                         />
                         {error && (
-                            <IonText color="danger" className="error-message">
-                                {error}
+                            <IonText color= "danger" className="error-message">
+                                <p>{error}</p>
                             </IonText>
                         )}
 
 
-                        <IonButton expand="block" type="submit" 
-                        className="Iniciar Sesion">
+                        <IonButton expand="block" type="submit" className="login-button">
+                            Iniciar Sesión
                         </IonButton>
                         <IonText color="medium" className="login-hint">
                             <p>Ingresa tu usuario y tu Token de Github</p>
                         </IonText>
                     </form>
                 </div>
+            </IonContent>
         </IonPage>
     );
 }

@@ -7,7 +7,7 @@ const RepoItem: React.FC<{repo:RepositoryItem}> = ({ repo }) => {
   return ( 
     <IonItem>
         <IonThumbnail slot="start"> 
-            <img src={repo.imageurl|| "https://i.pinimg.com/736x/06/44/69/0644695c31b934311a6a80e1064485bf.jpg"} alt={repo.name}/>
+            <img src={repo.imageurl|| "https://www.shutterstock.com/image-photo/spaceman-spacesuit-flight-outer-space-600nw-2556675931.jpg"} alt={repo.name}/>
         </IonThumbnail>
         <IonLabel>
            <h2>{repo.name}</h2>
