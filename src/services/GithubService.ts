@@ -4,7 +4,7 @@ import { UserInfo } from '../interfaces/UserInfo';
 
 import AuthService from "./AuthService";
 
-const GITHUB_API_URL = import.meta.env.VITE_API_URL || "https://api.github.com";
+const GITHUB_API_URL = import.meta.env.VITE_API_URL;
 
 const githubApi = axios.create({
     baseURL: GITHUB_API_URL,
@@ -31,10 +31,15 @@ export const fetchRepositories = async (): Promise<RepositoryItem[]> => {
             }
         });
 
+        if (!Array.isArray(response.data)) {
+            console.error("La respuesta de la API de GitHub no es un array:", response.data);
+            return [];
+        }
+
         const repositories: RepositoryItem[] = response.data.map((repo: any) => ({
             name: repo.name,
             description: repo.description ? repo.description : null,
-            imageUrl: repo.owner ? repo.owner.avatar_url : null,
+            imageurl: repo.owner ? repo.owner.avatar_url : null,
             owner: repo.owner ? repo.owner.login : null,
             language: repo.language ? repo.language : null,
         }));

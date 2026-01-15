@@ -39,7 +39,7 @@ const Tab3: React.FC = () => {
           <img
             alt={userInfo?.login ?? 'avatar'}
             src={userInfo?.avatar_url ?? 'https://via.placeholder.com/150'}
-            style={{ width: 120, height: 120, borderRadius: 8, display: 'block', margin: '16px auto' }}
+            style={{ width: 150, height: 150, borderRadius: '50%', display: 'block', margin: '16px auto' }}
           />
           <IonCardHeader>
             <IonCardTitle>{userInfo?.name ?? userInfo?.login ?? 'Usuario'}</IonCardTitle>

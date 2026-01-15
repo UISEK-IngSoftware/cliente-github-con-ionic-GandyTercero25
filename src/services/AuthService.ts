@@ -30,8 +30,9 @@ class AuthService{
 
     getAuthHeader(){
         const token = this.getToken();
-        if(token){
-          return 'token ' + token;
+        const username = this.getUsername();
+        if(token && username){
+          return 'Bearer ' + token;
         }
         return null;
     }
