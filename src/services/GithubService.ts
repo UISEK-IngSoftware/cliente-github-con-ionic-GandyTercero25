@@ -4,7 +4,7 @@ import { UserInfo } from '../interfaces/UserInfo';
 
 import AuthService from "./AuthService";
 
-const GITHUB_API_URL = import.meta.env.VITE_API_URL;
+const GITHUB_API_URL = import.meta.env.VITE_API_URL || "https://api.github.com";
 
 const githubApi = axios.create({
     baseURL: GITHUB_API_URL,
@@ -34,7 +34,7 @@ export const fetchRepositories = async (): Promise<RepositoryItem[]> => {
         const repositories: RepositoryItem[] = response.data.map((repo: any) => ({
             name: repo.name,
             description: repo.description ? repo.description : null,
-            imageurl: repo.owner ? repo.owner.avatar_url : null,
+            imageUrl: repo.owner ? repo.owner.avatar_url : null,
             owner: repo.owner ? repo.owner.login : null,
             language: repo.language ? repo.language : null,
         }));
