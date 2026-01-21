@@ -6,3 +6,13 @@ export interface RepositoryItem {
     owner: string | null; 
     language: string | null;
 }
+
+export interface RepositoryUpdatePayload {
+    name?: string;
+    description?: string | null;
+    homepage?: string;
+    private?: boolean;
+    has_issues?: boolean;
+    has_projects?: boolean;
+    has_wiki?: boolean;
+}

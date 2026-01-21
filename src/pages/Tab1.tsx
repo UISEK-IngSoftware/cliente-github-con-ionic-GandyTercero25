@@ -23,19 +23,34 @@ const Tab1: React.FC = () => {
     listRef.current?.closeSlidingItems();
   }
 
-  const handleDelete = (repo: RepositoryItem) => {
+  const handleDelete = (repoToDelete: RepositoryItem) => {
     presentAlert({
       header: 'Confirmar eliminación',
-      message: `¿Estás seguro de que quieres eliminar el repositorio ${repo.name}?`,
+      message: `¿Estás seguro de que quieres eliminar el repositorio ${repoToDelete.name}?`,
       buttons: [
         'Cancelar',
         {
           text: 'Eliminar',
           handler: async () => {
-            if (repo.owner) {
-              await deleteRepository(repo.owner, repo.name);
-              loadRepos();
-              closeAllSlidingItems();
+            if (!repoToDelete.owner) return;
+
+            const originalRepos = [...repos];
+
+            // Optimistic UI Update
+            const newRepos = repos.filter(r => r.id !== repoToDelete.id);
+            SetRepos(newRepos);
+            closeAllSlidingItems();
+
+            try {
+              await deleteRepository(repoToDelete.owner, repoToDelete.name);
+            } catch (error) {
+              console.error("Failed to delete repository:", error);
+              SetRepos(originalRepos);
+              presentAlert({
+                header: 'Error',
+                message: 'No se pudo eliminar el repositorio. Por favor, inténtalo de nuevo.',
+                buttons: ['OK'],
+              });
             }
           },
         },
@@ -48,12 +63,34 @@ const Tab1: React.FC = () => {
     closeAllSlidingItems();
   };
 
-  const handleSave = async (repo: RepositoryItem) => {
-    if (editingRepo && editingRepo.owner) {
-      await updateRepository(editingRepo.owner, editingRepo.name, repo);
-      setEditingRepo(null);
-      loadRepos();
-      closeAllSlidingItems();
+  const handleSave = async (updatedRepoData: RepositoryItem) => {
+    if (!editingRepo || !editingRepo.owner) return;
+
+    const originalRepos = [...repos];
+    const originalRepoName = editingRepo.name; 
+
+    // Optimistically update the UI with the full data structure
+    const newRepos = repos.map(r => (r.id === updatedRepoData.id ? updatedRepoData : r));
+    SetRepos(newRepos);
+
+    setEditingRepo(null);
+    closeAllSlidingItems();
+
+    try {
+      // But only send the allowed fields to the API
+      const updatePayload = {
+        name: updatedRepoData.name,
+        description: updatedRepoData.description,
+      };
+      await updateRepository(editingRepo.owner, originalRepoName, updatePayload);
+    } catch (error) {
+      console.error("Failed to update repository:", error);
+      SetRepos(originalRepos);
+      presentAlert({
+        header: 'Error',
+        message: 'No se pudo actualizar el repositorio. Por favor, inténtalo de nuevo.',
+        buttons: ['OK'],
+      });
     }
   };
 
