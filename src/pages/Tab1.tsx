@@ -36,7 +36,6 @@ const Tab1: React.FC = () => {
 
             const originalRepos = [...repos];
 
-            // Optimistic UI Update
             const newRepos = repos.filter(r => r.id !== repoToDelete.id);
             SetRepos(newRepos);
             closeAllSlidingItems();
@@ -69,7 +68,6 @@ const Tab1: React.FC = () => {
     const originalRepos = [...repos];
     const originalRepoName = editingRepo.name; 
 
-    // Optimistically update the UI with the full data structure
     const newRepos = repos.map(r => (r.id === updatedRepoData.id ? updatedRepoData : r));
     SetRepos(newRepos);
 
@@ -77,7 +75,6 @@ const Tab1: React.FC = () => {
     closeAllSlidingItems();
 
     try {
-      // But only send the allowed fields to the API
       const updatePayload = {
         name: updatedRepoData.name,
         description: updatedRepoData.description,

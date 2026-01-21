@@ -77,6 +77,7 @@ const Login: React.FC = () => {
 
                         <IonButton expand="block" type="submit" 
                         className="Iniciar Sesion">
+                            Iniciar Sesion
                         </IonButton>
                         <IonText color="medium" className="login-hint">
                             <p>Ingresa tu usuario y tu Token de Github</p>

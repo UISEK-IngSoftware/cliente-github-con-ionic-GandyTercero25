@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
+import React, { useState } from 'react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, useIonViewWillEnter } from '@ionic/react';
 import { getUserInfo } from '../services/GithubService';
 
 import './Tab3.css';
@@ -18,9 +18,9 @@ const Tab3: React.FC = () => {
     }
   };
 
-  useEffect(() => {
+  useIonViewWillEnter(() => {
     loadUserInfo();
-  }, []);
+  });
 
   return (
     <IonPage>
