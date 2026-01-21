@@ -37,6 +37,7 @@ export const fetchRepositories = async (): Promise<RepositoryItem[]> => {
         }
 
         const repositories: RepositoryItem[] = response.data.map((repo: any) => ({
+            id: repo.id,
             name: repo.name,
             description: repo.description ? repo.description : null,
             imageurl: repo.owner ? repo.owner.avatar_url : null,
@@ -59,6 +60,24 @@ export const createRepository = async (repo: RepositoryItem): Promise<void> => {
         
     } catch (error) {
         console.error("Ocurrió un error al crear el repositorio:", error);
+    }
+};
+
+export const deleteRepository = async (owner: string, repo: string): Promise<void> => {
+    try {
+        await githubApi.delete(`/repos/${owner}/${repo}`);
+        console.log("Repositorio eliminado");
+    } catch (error) {
+        console.error("Ocurrió un error al eliminar el repositorio:", error);
+    }
+};
+
+export const updateRepository = async (owner: string, repo: string, updatedRepo: RepositoryItem): Promise<void> => {
+    try {
+        await githubApi.patch(`/repos/${owner}/${repo}`, updatedRepo);
+        console.log("Repositorio actualizado");
+    } catch (error) {
+        console.error("Ocurrió un error al actualizar el repositorio:", error);
     }
 };
 

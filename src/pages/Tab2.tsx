@@ -1,4 +1,4 @@
-import { IonButton, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonInput, IonTextarea } from '@ionic/react';
+import { IonButton, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonInput, IonTextarea, useIonAlert } from '@ionic/react';
 import './Tab2.css';
 import { useHistory } from 'react-router-dom';
 import { RepositoryItem } from '../interfaces/RepositoryItem';
@@ -8,6 +8,7 @@ import { createRepository } from '../services/GithubService';
 const Tab2: React.FC = () => {
 
   const history = useHistory();
+  const [presentAlert] = useIonAlert();
   const [repoFormData, setRepoFormData] = useState<RepositoryItem>({
     name: '',
     description: '',
@@ -26,14 +27,33 @@ const Tab2: React.FC = () => {
 
   const saveRepository = () => {
     if (repoFormData.name.trim() === '') {
-      alert('El nombre del repositorio es obligatorio.');
+      presentAlert({
+        header: 'Error',
+        message: 'El nombre del repositorio es obligatorio.',
+        buttons: ['OK'],
+      });
       return;
     }
     createRepository(repoFormData)
       .then(() => {
-        history.push('/tab1');
+        presentAlert({
+          header: 'Confirmación',
+          message: 'El repositorio se ha creado correctamente.',
+          buttons: [
+            {
+              text: 'OK',
+              handler: () => {
+                history.push('/repositorio');
+              },
+            },
+          ],
+        });
       }).catch(() => {
-        alert('Hubo un error al crear el repositorio. Por favor, inténtalo de nuevo.');
+        presentAlert({
+          header: 'Error',
+          message: 'Hubo un error al crear el repositorio. Por favor, inténtalo de nuevo.',
+          buttons: ['OK'],
+        });
       });
   };
 
